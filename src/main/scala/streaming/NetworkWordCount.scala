@@ -7,8 +7,8 @@ object NetworkWordCount {
     def main(args: Array[String]): Unit = {
         // 创建一个具有两个工作线程(working thread)和批次间隔为1秒的本地 StreamingContext
         // master 需要 2 个核，以防止饥饿情况(starvation scenario)。
-        val conf = new SparkConf()
-        val ssc = new StreamingContext(conf, Seconds(1))
+        val conf = new SparkConf().setMaster("local[2]").setAppName("NetworkWordCount")
+        val ssc = new StreamingContext(conf, Seconds(3))
         // 创建一个将要连接到 hostname:port 的离散流，如 localhost:9999
         val lines = ssc.socketTextStream("localhost", 9999)
         // 将每一行拆分成单词 val words = lines.flatMap(_.split(" "))
